@@ -1,0 +1,52 @@
+# Fraggy
+
+Get fragmentation distribution of a filesystem, which implements `FIEMAP` as an io system call.
+
+
+## Requirements
+
+-   GCC
+-   CMake
+-   R *(optional)*
+
+    ```
+    $ R --no-save <<< "install.packages(c('tidyverse', 'svglite'))"
+    ```
+
+
+## Build
+
+```
+$ mkdir build/
+$ cd build/
+$ cmake build ../
+$ make
+```
+
+
+## Usage
+
+The aggregator `fraggy.agg` only needs a path as a sole parameter. It prints
+the CSV directly to standard output. Output redirection on the shell is
+required to write into a file.
+
+```
+$ ./fraggy.agg /mnt/filesystem > frag_distribution.csv
+```
+
+To run the visualizer only append the distribution CSVs. The number of
+distributions to be compared is not limited. To set ordinary labels to each
+file the optional parameter `-l` can be used. They must match the number of
+given files.
+
+Additionally, the name and path of the graph can be set via `-g`, otherwise it
+is saved in the current working directory as `frag_distribution.svg`.
+The key values are printed to standard output.
+
+```
+$ ./fraggy.anlz                  \
+    -l "fragmented,defragmented" \
+    -g "./graph.svg"             \
+    ./frag_distribution1.csv     \
+    ./frag_distribution2.csv
+```
