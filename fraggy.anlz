@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 ##------------------------------------------------------------------------------
-## fraggy analyser and visualiser
+## fraggy analyzer and visualiser
 ##
 ## @author Lars Thoms
 ## @date   2021-01-24
@@ -16,7 +16,7 @@ library(ggplot2)
 ##------------------------------------------------------------------------------
 
 # initialize parser
-p <- arg_parser("analyser and visualizer of fragmentation distribution", name = "fraggy.anlz", hide.opts = TRUE)
+p <- arg_parser("analyzer and visualizer of fragmentation distribution", name = "fraggy.anlz", hide.opts = TRUE)
 
 # define arguments
 p <- add_argument(p, "--xlim", default = 0, type = "numeric", help = "boundaries on x axis")
