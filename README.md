@@ -34,7 +34,7 @@ required to write into a file.
 $ ./fraggy.agg /mnt/filesystem > frag_distribution.csv
 ```
 
-To run the analyser and visualizer a minimum of one CSV from `fraggy.agg` is
+To run the analyzer and visualizer a minimum of one CSV from `fraggy.agg` is
 required. The number of distributions to be compared is not limited. To set
 ordinary labels to each file the optional parameter `-l | --label` can be used.
 They must match the number of given input files.
