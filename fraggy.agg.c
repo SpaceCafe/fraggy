@@ -1,15 +1,17 @@
-/**
- * fraggy.agg.c
+/*******************************************************************************
+ * get fragmentation distribution of a filesystem,
+ * which implements `FIEMAP` as an io system call.
  *
- * @author Lars Thoms <lars@thoms.io>
- */
-
-/* ====[ Requirements ]========================================================================== */
+ * @author Lars Thoms
+ * @date 2020-01-24
+ ******************************************************************************/
 
 #include "fraggy.agg.h"
 
 
-/* ====[ FIEMAP ]================================================================================ */
+/*******************************************************************************
+ * FIEMAP
+ ******************************************************************************/
 
 static int filefrag_fiemap(long fd, unsigned int *num_extents)
 {
@@ -95,7 +97,9 @@ static int filefrag_fiemap(long fd, unsigned int *num_extents)
 }
 
 
-/* ====[ Node Handler ]========================================================================== */
+/*******************************************************************************
+ * node handler
+ ******************************************************************************/
 
 static int node_fragmentation(const char *node_path, const struct stat *node_info,
                               const int node_typeflag, struct FTW *node_pathinfo)
@@ -137,47 +141,80 @@ static int node_fragmentation(const char *node_path, const struct stat *node_inf
 }
 
 
-
-/* ====[ Usage ]================================================================================= */
+/*******************************************************************************
+ * usage
+ ******************************************************************************/
 
 static void print_usage(const char *program_name)
 {
-    fprintf(stderr, "Usage: %s [ FILE | DIRECTORY ]\n"
-                    "Get a list of all amount of extents per node in filesystem", program_name);
+    fprintf(stderr, "Usage: %1$s [OPTIONS] [ FILE | DIRECTORY ]\n"
+                    "Get a list of all amount of extents per node in filesystem\n\n"
+                    "OPTIONS\n"
+                    "    -i  Ignore file errors\n\n"
+                    "STDOUT\n"
+                    "        Comma separated fragmentation distribution\n"
+                    "        Output redirection on the shell is required to dump data to a file.\n"
+                    "        E.g.: %1$s /mnt 1> frag.csv\n", program_name);
 }
 
 
-/* ====[ Program ]=============================================================================== */
+/*******************************************************************************
+ * main application
+ ******************************************************************************/
 
 int main(int argc, char *argv[])
 {
+    int option;
+    int iflag = 0;
     int rc;
 
-    // Check if parameter is set
-    if (argc > 1)
+    /* get options */
+    while((option = getopt (argc, argv, "hi")) != -1)
     {
-        // Check for invalid directory path
-        if(argv[1] == NULL || *argv[1] == '\0')
+        switch(option)
+        {
+            case 'h':
+                print_usage(argv[0]);
+                return EXIT_FAILURE;
+            case 'i':
+                iflag = 1;
+                break;
+            default:
+                abort();
+        }
+    }
+
+    /* get directory path */
+    if(optind < argc)
+    {
+
+        /* check for invalid directory path */
+        if(argv[optind] == NULL || *argv[optind] == '\0')
         {
             fprintf(stderr, "%s.\n", strerror(errno = EINVAL));
             return EXIT_FAILURE;
         }
 
-        rc = nftw(argv[1], node_fragmentation, USE_FDS, FTW_PHYS);
+        rc = nftw(argv[optind], node_fragmentation, USE_FDS, FTW_PHYS);
         if(rc)
         {
             fprintf(stderr, "%s.\n", strerror(errno = rc));
-            return EXIT_FAILURE;
+
+            if(!iflag)
+            {
+                return EXIT_FAILURE;
+            }
         }
     }
 
-    // Print usage
+    /* print usage*/
     else
     {
         print_usage(argv[0]);
         return EXIT_FAILURE;
     }
 
+    /* print distribution to stdout */
     print_distribution();
     return EXIT_SUCCESS;
 }

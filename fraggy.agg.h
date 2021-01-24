@@ -1,28 +1,28 @@
-/**
- * fraggy.agg.h
+/*******************************************************************************
+ * get fragmentation distribution of a filesystem,
+ * which implements `FIEMAP` as an io system call.
  *
- * @author Lars Thoms <lars@thoms.io>
- */
+ * @author Lars Thoms
+ * @date 2020-01-24
+ ******************************************************************************/
 
 #ifndef FRAGGY_AGG_H
 #define FRAGGY_AGG_H
 
-/* ====[ Requirements ]========================================================================== */
-
-// Enable POSIX.1-2008 + XSI features
+/* enable POSIX.1-2008 + XSI features */
 #define _XOPEN_SOURCE 700
 
-// Enable 64-bit file sizes and offsets support of C library
+/* enable 64-bit file sizes and offsets support of C library */
 #define _LARGEFILE64_SOURCE
 #define _FILE_OFFSET_BITS 64
 
-/* Set number of used file descriptors
-   POSIX.1 allows minimum of 20 descriptors minus 3 standard streams. Therefore, 15 is safe. */
+/* set number of used file descriptors
+   POSIX.1 allows minimum of 20 descriptors minus 3 standard streams.
+   Therefore, 15 is safe. */
 #ifndef USE_FDS
 #define USE_FDS 15
 #endif
 
-// Includes
 #include <errno.h>
 #include <fcntl.h>
 #include <ftw.h>
@@ -36,7 +36,9 @@
 #include "distribution.h"
 
 
-/* ====[ Declarations ]========================================================================== */
+/*******************************************************************************
+ * declarations
+ ******************************************************************************/
 
 /**
  * Fetch FIEMAP from given file descriptor and count extents.
@@ -47,6 +49,7 @@
  * @return int            errno
  */
 static int filefrag_fiemap(long, unsigned int *);
+
 
 /**
  * Determine fragmentation count of given node and populate distribution list
@@ -59,6 +62,7 @@ static int filefrag_fiemap(long, unsigned int *);
  * @return int                 errno
  */
 static int node_fragmentation(const char *, const struct stat *, const int, struct FTW *);
+
 
 /**
  * Print usage information

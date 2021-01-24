@@ -1,23 +1,23 @@
-/**
- * distribution.h
+/*******************************************************************************
+ * distribution handler of fraggy.agg
  *
- * @author Lars Thoms <lars@thoms.io>
- */
+ * @author Lars Thoms
+ * @date 2020-01-24
+ ******************************************************************************/
 
 #ifndef FRAGGY_DISTRIBUTION_H
 #define FRAGGY_DISTRIBUTION_H
 
-/* ====[ Requirements ]========================================================================== */
-
-// Includes
 #include <stdio.h>
 #include "uthash.h"
 
 
-/* ====[ Declarations ]========================================================================== */
+/*******************************************************************************
+ * declarations
+ ******************************************************************************/
 
 /**
- * Hash map to store fragmentation counts and their frequency
+ * hash map to store fragmentation counts and their frequency
  */
 struct distribution_tpl
 {
@@ -26,14 +26,14 @@ struct distribution_tpl
 };
 
 /**
- * Add amount of fragments to distribution table
+ * add amount of fragments to distribution table
  *
  * @param int fragmentation count
  */
 void increase_distribution(int);
 
 /**
- * Sort by key ascending
+ * sort by key ascending
  *
  * @param struct distribution_tpl *
  * @param struct distribution_tpl *
@@ -42,7 +42,7 @@ void increase_distribution(int);
 int sort_distribution(struct distribution_tpl *, struct distribution_tpl *);
 
 /**
- * Generate and print CSV from distribution map
+ * generate and print CSV from distribution map
  */
 void print_distribution(void);
 

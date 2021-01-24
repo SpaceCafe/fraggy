@@ -1,13 +1,12 @@
-/**
- * distribution.c
+/*******************************************************************************
+ * distribution handler of fraggy.agg
  *
- * @author Lars Thoms <lars@thoms.io>
- */
+ * @author Lars Thoms
+ * @date 2020-01-24
+ ******************************************************************************/
 
 #include "distribution.h"
 
-
-/* ====[ Distribution ]========================================================================== */
 
 struct distribution_tpl* distribution = NULL;
 
